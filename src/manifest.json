@@ -14,7 +14,8 @@
   "background": {
     "persistent": true,
     "scripts": [
-      "extension/background.js"
+      "background.js",
+      "runtime.js"
     ]
   },
   "content_scripts": [
