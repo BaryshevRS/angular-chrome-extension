@@ -1,0 +1,43 @@
+{
+  "manifest_version": 2,
+  "name": "Meowoof",
+  "description": "Chrome extension for cats and dogs lovers",
+  "version": "1.0.0",
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "storage",
+    "https://*/*"
+  ],
+  "author": "",
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "background": {
+    "persistent": true,
+    "scripts": [
+      "extension/background.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "js": [
+        "extension/content-script.js"
+      ],
+      "matches": [
+        "https://*/*",
+        "http://*/*"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "icons": {
+    "16": "assets/icons/16.png",
+    "48": "assets/icons/48.png",
+    "128": "assets/icons/128.png"
+  },
+  "browser_action": {
+    "default_popup": "index.html"
+  },
+  "web_accessible_resources": [
+  ]
+}
