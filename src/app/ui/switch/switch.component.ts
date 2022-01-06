@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+
+type SwitchSize = 'mini' | 'default'
 
 @Component({
   selector: 'app-switch',
@@ -6,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./switch.component.scss']
 })
 export class SwitchComponent implements OnInit {
+
+  @Input() size: SwitchSize = 'default'
 
   constructor() { }
 

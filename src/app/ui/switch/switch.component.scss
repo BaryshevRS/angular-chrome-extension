@@ -1,3 +1,7 @@
+:host {
+  display: flex;
+}
+
 /* The switch - the box around the slider */
 .switch {
   position: relative;
@@ -55,4 +59,20 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.switch.mini {
+    width: 40px;
+    height: 20px;
+
+  .slider:before {
+    height: 13.33px;
+    width: 13.33px;
+    left: 4px;
+    bottom: 4px;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(19px);
+  }
 }
