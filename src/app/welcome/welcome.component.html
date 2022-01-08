@@ -6,32 +6,36 @@
         <img src="assets/logo.svg" alt="">
       </div>
     </div>
+    <ng-container *ngIf="formWelcome">
+      <form [formGroup]="formWelcome" action="">
+        <div class="welcome__main">
+          <div class="welcome__installed">
+            <div class="welcome__success">Success!</div>
+            <div class="welcome__success welcome__success--secondary">Meowoof is installed</div>
 
-    <div class="welcome__main">
-      <div class="welcome__installed">
-        <div class="welcome__success">Success!</div>
-        <div class="welcome__success welcome__success--secondary">Meowoof is installed</div>
+            <div class="welcome__secondary">
+              Now select the pets you like most — or<br> all of them!
+            </div>
+          </div>
 
-        <div class="welcome__secondary">
-          Now select the pets you like most — or<br> all of them!
+          <div class="welcome__controls">
+            <div class="welcome__switch">
+              <span>I love cats</span>
+              <app-switch formControlName="loveCats"></app-switch>
+            </div>
+            <div class="welcome__switch">
+              <span>I love dogs</span>
+              <app-switch formControlName="loveDogs"></app-switch>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="welcome__controls">
-        <div class="welcome__switch">
-          <span>I love cats</span>
-          <app-switch></app-switch>
-        </div>
-        <div class="welcome__switch">
-          <span>I love dogs</span>
-          <app-switch></app-switch>
-        </div>
-      </div>
-    </div>
-
+      </form>
+    </ng-container>
     <div class="welcome__footer">
-      <div class="welcome__link-btn">
-       Into the wild <div class="arrow"></div>
-      </div>
+      <a href="https://en.wikipedia.org/wiki/Cats_%26_Dogs" class="welcome__link-btn">
+        Into the wild
+        <div class="arrow"></div>
+      </a>
     </div>
   </div>
 </div>

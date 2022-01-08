@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfigsService } from "../services/configs/configs.service";
 import { FormBuilder, FormGroup } from "@angular/forms";
-import { debounceTime, from, withLatestFrom } from "rxjs";
+import { debounceTime, from, Subject, takeUntil, withLatestFrom } from "rxjs";
 
 @Component({
   selector: 'app-popup',
@@ -10,7 +10,8 @@ import { debounceTime, from, withLatestFrom } from "rxjs";
 })
 export class PopupComponent implements OnInit {
   public configsForm!: FormGroup;
-  url: string = '';
+  public url: string = '';
+  private unSubscribe$: Subject<void> = new Subject<void>();
 
   constructor(
     private configs: ConfigsService,
@@ -30,7 +31,8 @@ export class PopupComponent implements OnInit {
       .pipe(
         withLatestFrom(
           currentTab
-        )
+        ),
+        takeUntil(this.unSubscribe$)
       ).subscribe(([configs, tab]) => {
       this.url = new URL(tab.url as string).host;
 
@@ -45,7 +47,8 @@ export class PopupComponent implements OnInit {
       // Form updated on change
       this.configsForm.valueChanges
         .pipe(
-          debounceTime(400)
+          debounceTime(400),
+          takeUntil(this.unSubscribe$)
         ).subscribe((value) => {
         this.configs.setValue(
           configs,
