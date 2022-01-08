@@ -23,8 +23,8 @@ console.log('init2')
 //   });
 // }, { url: [{ urlMatches: '*' }] });
 
-/*// Отслеживаем изменения, можно удалить
-chrome.storage.onChanged.addListener(function (changes, namespace) {
+// Отслеживаем изменения
+const storageHandler = function(changes: any, namespace: any) {
   for (var key in changes) {
     var storageChange = changes[key];
     console.log('Storage key "%s" in namespace "%s" changed. ' +
@@ -34,4 +34,7 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
       storageChange.oldValue,
       storageChange.newValue);
   }
-});*/
+}
+chrome.storage.onChanged.addListener(storageHandler);
+
+// chrome.storage.onChanged.removeListener(storageHandler);
