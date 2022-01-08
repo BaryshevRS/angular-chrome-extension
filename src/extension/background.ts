@@ -10,9 +10,6 @@ chrome.runtime.onInstalled.addListener(function ({reason}) {
     });
   }
 });
-const x = 444;
-
-console.log('init2')
 
 // chrome.webNavigation.onCompleted.addListener(() => {
 //   chrome.tabs.query({ active: true, currentWindow: true }, ([{ id }]) => {
@@ -30,7 +27,7 @@ const storageHandler = function(changes: any, namespace: any) {
     console.log('Storage key "%s" in namespace "%s" changed. ' +
       'Old value was "%s", new value is "%s".',
       key,
-      namespace,
+      JSON.stringify(changes),
       storageChange.oldValue,
       storageChange.newValue);
   }

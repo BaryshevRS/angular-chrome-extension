@@ -1,43 +1,44 @@
 <div class="popup">
   <div class="popup__container">
-
     <div class="popup__header">
       <div class="popup__logo">
         <img src="assets/logo.svg" alt="">
       </div>
       <div class="popup__logo-title">Meob<b>woof</b></div>
     </div>
+    <ng-container *ngIf="configsForm">
+      <form [formGroup]="configsForm" action="">
+        <div class="popup__global-controls">
+          <div class="popup__control">
+            <span>
+              Enable the <b>extension</b>
+            </span>
+            <app-switch formControlName="enableExtension" size="mini"></app-switch>
+          </div>
 
-    <div class="popup__global-controls">
-      <div class="popup__control">
-        <span>
-          Enable the <b>extension</b>
-        </span>
-        <app-switch size="mini"></app-switch>
-      </div>
+          <div class="popup__control">
+            <span>
+              Enable on <b>{{url}}</b>
+            </span>
+            <app-switch formControlName="enableSite" size="mini"></app-switch>
+          </div>
+        </div>
+        <div class="popup__main-controls">
+          <div class="popup__title">
+            Select the pets you <br> like most — or <b>all of<br> them!</b>
+          </div>
 
-      <div class="popup__control">
-        <span>
-          Enable on <b>stackowerflow.com</b>
-        </span>
-        <app-switch size="mini"></app-switch>
-      </div>
-    </div>
+          <div class="popup__control popup__control--secondary">
+            <span>I love cats</span>
+            <app-switch formControlName="loveCats" size="mini"></app-switch>
+          </div>
 
-    <div class="popup__main-controls">
-      <div class="popup__title">
-        Select the pets you <br> like most — or <b>all of<br> them!</b>
-      </div>
-
-      <div class="popup__control popup__control--secondary">
-        <span>I love cats</span>
-        <app-switch size="mini"></app-switch>
-      </div>
-
-      <div class="popup__control popup__control--secondary">
-        <span>I love dogs </span>
-        <app-switch size="mini"></app-switch>
-      </div>
-    </div>
+          <div class="popup__control popup__control--secondary">
+            <span>I love dogs </span>
+            <app-switch formControlName="loveDogs" size="mini"></app-switch>
+          </div>
+        </div>
+      </form>
+    </ng-container>
   </div>
 </div>
