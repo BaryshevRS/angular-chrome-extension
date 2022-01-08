@@ -3,22 +3,18 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { WelcomeComponent } from './welcome/welcome.component';
-import { PopupComponent } from './popup/popup.component';
-import { SwitchComponent } from './ui/switch/switch.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { PopupModule } from "./popup/popup.module";
+import { WelcomeModule } from "./welcome/welcome.module";
 
 @NgModule({
   declarations: [
     AppComponent,
-    WelcomeComponent,
-    PopupComponent,
-    SwitchComponent
   ],
   imports: [
     BrowserModule,
-    ReactiveFormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    PopupModule,
+    WelcomeModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
