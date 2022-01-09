@@ -26,6 +26,7 @@
         "runtime.js",
         "content.js"
       ],
+      "css": ["extension/content/styles/content.css"],
       "matches": [
         "https://*/*",
         "http://*/*"
@@ -42,5 +43,6 @@
     "default_popup": "index.html"
   },
   "web_accessible_resources": [
+    "extension/content/styles/content.css"
   ]
 }

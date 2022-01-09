@@ -24,16 +24,15 @@ const test = () => {
     const b = document.createElement('div');
     b.innerHTML = 'new <b>dog</b> create';
     document.body.appendChild(b);
-  }, 5000);
+  }, 10000);
 
-  setInterval(() => {
-    let div = document.createElement('div');
-    let p = document.createElement('p');
-    p.innerHTML = 'new best cat';
-    div.append(p);
-    document.body.append(div);
-  }, 6000);
-
+  // setInterval(() => {
+  //   let div = document.createElement('div');
+  //   let p = document.createElement('p');
+  //   p.innerHTML = 'new best cat';
+  //   div.append(p);
+  //   document.body.append(div);
+  // }, 6000);
 }
 
 const pageContent$ = new ReplaySubject();
@@ -69,7 +68,10 @@ const textNodesObservable = (checkConditions: (node: ChildNode) => boolean) => {
 }
 
 const checkConditions = (node: ChildNode): boolean => {
-  if (node.textContent?.match(/ cat |^cat$|^cat | cat$| dog |^dog$|^dog | dog$/i)) {
+  if (
+    node.textContent?.match(new RegExp(/cat/, 'gi')) ||
+    node.textContent?.match(new RegExp(/dog/, 'gi'))
+  ) {
     return true;
   }
   return false;
@@ -103,7 +105,35 @@ const extension = (
     disabledSites,
     loveCats,
     loveDogs
-  }: Configs) => {
+  }: Configs,
+  textContent = ''
+) => {
+  const parentNode = textNode.parentNode;
+  let text = parentNode?.textContent || '';
+  text = text
+    .replace(
+      new RegExp(/(^cat[^a-z]{1}|^cat$|[^a-z]{1}cat[^a-z]{1}|[^a-z]{1}cat$)/, 'gi'),
+      `<span data-meobwoof>$1</span>`
+    )
+    .replace(
+      new RegExp(/(^dog[^a-z]{1}|^dog$|[^a-z]{1}dog[^a-z]{1}|[^a-z]{1}dog$)/, 'gi'),
+      `<span data-meobwoof>$1</span>`
+    )
+    .replace(
+      new RegExp(/(^cats[^a-z]{1}|^cats$|[^a-z]{1}cats[^a-z]{1}|[^a-z]{1}cats$)/, 'gi'),
+      `<span data-meobwoof>$1</span>`
+    )
+    .replace(
+      new RegExp(/(^dogs[^a-z]{1}|^dogs$|[^a-z]{1}dogs[^a-z]{1}|[^a-z]{1}dogs$)/, 'gi'),
+      `<span data-meobwoof>$1</span>`
+    );
+
+  console.log('textContent', textContent);
+  try {
+    (parentNode as HTMLElement).innerHTML = text;
+  } catch (e) {
+    console.warn('errror', textContent)
+  }
 
   if (
     (loveCats && loveDogs) ||
@@ -120,16 +150,14 @@ const extension = (
 const extension$ = configs$.asObservable()
   .pipe(
     skip(1),
-    tap((t) => {
-      console.log('tap', t)
-    }),
     switchMap((configs: Configs) => pageContent$
-      .pipe(map((textNode) => ({textNode, configs})))
+      .pipe(map((textNode) => ({textNode, configs, textContent: (textNode as ChildNode).textContent})))
     )
   )
 
-extension$.subscribe(({textNode, configs}) => {
-  console.log('newValue', {textNode, configs})
+extension$.subscribe(({textNode, configs, textContent}) => {
+  // console.log('newValue', {textNode, configs})
+  extension(textNode as ChildNode, configs, textContent || '')
 })
 
 window.onload = () => {
