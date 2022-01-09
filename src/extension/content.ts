@@ -1,7 +1,18 @@
-import { of, Observable, BehaviorSubject, ReplaySubject, interval } from 'rxjs';
+import {
+  BehaviorSubject,
+  ReplaySubject,
+  skip,
+  switchMap
+} from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { getTextNodes } from "./content/text-content";
+import { getTextNodes } from "./content/text-nodes";
 import { configMutation, observeOnMutation } from "./content/mutation-observable";
+import { StorageService } from "../app/services/storage/storage.service";
+import { ConfigsService } from "../app/services/configs/configs.service";
+import { Configs } from "../app/services/configs/configs";
+
+const storageService = new StorageService();
+const configsService = new ConfigsService(storageService);
 
 const test = () => {
   const span = document.createElement('div');
@@ -25,13 +36,13 @@ const test = () => {
 
 }
 
-const store = new ReplaySubject();
+const pageContent$ = new ReplaySubject();
 
 const textNodesObservable = (checkConditions: (node: ChildNode) => boolean) => {
   const textNodes = getTextNodes(document.body);
   textNodes.forEach((node) => {
     if (checkConditions(node)) {
-      store.next(node);
+      pageContent$.next(node);
     }
   })
 
@@ -44,7 +55,7 @@ const textNodesObservable = (checkConditions: (node: ChildNode) => boolean) => {
             const textNodes = getTextNodes(mutationChildNode);
             textNodes.forEach((node) => {
               if (checkConditions(node)) {
-                store.next(node);
+                pageContent$.next(node);
               }
             })
           });
@@ -64,16 +75,64 @@ const checkConditions = (node: ChildNode): boolean => {
   return false;
 }
 
-var x = 0;
-store.subscribe((values) => {
-  ++x;
-  console.log('node', (values as HTMLElement).nodeValue?.toString());
-  console.log('x', x)
+const configs$ = new BehaviorSubject<Configs>({} as Configs);
+
+configsService.getValue().subscribe((configs) => {
+  // console.log('configs', configs);
+  configs$.next(configs);
+});
+
+// Отслеживаем изменения
+const storageHandler = function (changes: Record<string, any>) {
+  for (let [key, value] of Object.entries(changes)) {
+    if (key === 'configs') {
+      const {newValue}: Record<string, Configs> = value;
+      // console.log('newValue', newValue)
+      configs$.next(newValue);
+    }
+  }
+}
+
+// todo: removeListener
+chrome.storage.onChanged.addListener(storageHandler);
+
+const extension = (
+  textNode: ChildNode,
+  {
+    enableExtension,
+    disabledSites,
+    loveCats,
+    loveDogs
+  }: Configs) => {
+
+  if (
+    (loveCats && loveDogs) ||
+    (!loveCats && !loveDogs)
+  ) {
+
+  } else if (loveCats) {
+
+  } else if (loveDogs) {
+
+  }
+}
+
+const extension$ = configs$.asObservable()
+  .pipe(
+    skip(1),
+    tap((t) => {
+      console.log('tap', t)
+    }),
+    switchMap((configs: Configs) => pageContent$
+      .pipe(map((textNode) => ({textNode, configs})))
+    )
+  )
+
+extension$.subscribe(({textNode, configs}) => {
+  console.log('newValue', {textNode, configs})
 })
 
 window.onload = () => {
   test();
-  (document.querySelector('h1') as HTMLHeadingElement).style.backgroundColor = 'red';
-
   textNodesObservable(checkConditions);
 }

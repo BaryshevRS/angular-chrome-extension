@@ -20,7 +20,7 @@ chrome.runtime.onInstalled.addListener(function ({reason}) {
 //   });
 // }, { url: [{ urlMatches: '*' }] });
 
-// Отслеживаем изменения
+/*// Отслеживаем изменения
 const storageHandler = function(changes: any, namespace: any) {
   for (var key in changes) {
     var storageChange = changes[key];
@@ -32,6 +32,6 @@ const storageHandler = function(changes: any, namespace: any) {
       storageChange.newValue);
   }
 }
-chrome.storage.onChanged.addListener(storageHandler);
+chrome.storage.onChanged.addListener(storageHandler);*/
 
 // chrome.storage.onChanged.removeListener(storageHandler);
