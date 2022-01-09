@@ -11,6 +11,11 @@ import { StorageService } from "../app/services/storage/storage.service";
 import { ConfigsService } from "../app/services/configs/configs.service";
 import { Configs } from "../app/services/configs/configs";
 
+interface PageContent {
+  textNode: ParentNode,
+  textContent: string
+}
+
 const storageService = new StorageService();
 const configsService = new ConfigsService(storageService);
 
@@ -35,13 +40,16 @@ const test = () => {
   // }, 6000);
 }
 
-const pageContent$ = new ReplaySubject();
+const pageContent$ = new ReplaySubject<PageContent>();
 
 const textNodesObservable = (checkConditions: (node: ChildNode) => boolean) => {
   const textNodes = getTextNodes(document.body);
   textNodes.forEach((node) => {
     if (checkConditions(node)) {
-      pageContent$.next(node);
+      pageContent$.next({
+        textNode: node.parentNode as ParentNode,
+        textContent: node.textContent || ''
+      });
     }
   })
 
@@ -54,7 +62,10 @@ const textNodesObservable = (checkConditions: (node: ChildNode) => boolean) => {
             const textNodes = getTextNodes(mutationChildNode);
             textNodes.forEach((node) => {
               if (checkConditions(node)) {
-                pageContent$.next(node);
+                pageContent$.next({
+                  textNode: node.parentNode as ParentNode,
+                  textContent: node.textContent || ''
+                })
               }
             })
           });
@@ -98,18 +109,7 @@ const storageHandler = function (changes: Record<string, any>) {
 // todo: removeListener
 chrome.storage.onChanged.addListener(storageHandler);
 
-const extension = (
-  textNode: ChildNode,
-  {
-    enableExtension,
-    disabledSites,
-    loveCats,
-    loveDogs
-  }: Configs,
-  textContent = ''
-) => {
-  const parentNode = textNode.parentNode;
-  let text = parentNode?.textContent || '';
+const setMatches = (text = '', changeTo?: Record<string, string>) => {
   text = text
     .replace(
       new RegExp(/(^cat[^a-z]{1}|^cat$|[^a-z]{1}cat[^a-z]{1}|[^a-z]{1}cat$)/, 'gi'),
@@ -128,22 +128,49 @@ const extension = (
       `<span data-meobwoof>$1</span>`
     );
 
-  console.log('textContent', textContent);
-  try {
-    (parentNode as HTMLElement).innerHTML = text;
-  } catch (e) {
-    console.warn('errror', textContent)
+  if (changeTo) {
+    Object.entries(changeTo).forEach(([from, to]) => {
+      text = text.replace(
+        new RegExp(`[^>]*?${from}[^<]*?`, 'g'),function (str: string) {
+          return str.replace(from, to)
+        }
+      )
+    });
   }
+
+  return text;
+}
+
+const extension = (
+  textNode: ParentNode,
+  {
+    enableExtension,
+    disabledSites,
+    loveCats,
+    loveDogs
+  }: Configs,
+  textContent = ''
+) => {
+  const parentNode = textNode; // textNode.parentNode;
+  let text = textContent // parentNode?.textContent || '';
+
+  // console.log('textContent', textNode);
 
   if (
     (loveCats && loveDogs) ||
     (!loveCats && !loveDogs)
   ) {
-
+    text = setMatches(text);
   } else if (loveCats) {
-
+    text = setMatches(text, {'Dogs': 'Cats', 'dogs': 'cats', 'Dog': 'Cat', 'dog': 'cat'});
   } else if (loveDogs) {
+    text = setMatches(text, {'Cats': 'Dogs', 'cats': 'dogs', 'Cat': 'Dog', 'cat': 'dog'});
+  }
 
+  try {
+    (parentNode! as HTMLElement).innerHTML = text;
+  } catch (e) {
+    console.error(e)
   }
 }
 
@@ -151,13 +178,13 @@ const extension$ = configs$.asObservable()
   .pipe(
     skip(1),
     switchMap((configs: Configs) => pageContent$
-      .pipe(map((textNode) => ({textNode, configs, textContent: (textNode as ChildNode).textContent})))
+      .pipe(map((obj: PageContent) => ({...obj, configs})))
     )
-  )
+  );
 
 extension$.subscribe(({textNode, configs, textContent}) => {
   // console.log('newValue', {textNode, configs})
-  extension(textNode as ChildNode, configs, textContent || '')
+  extension(textNode, configs, textContent)
 })
 
 window.onload = () => {
