@@ -7,7 +7,8 @@
     "activeTab",
     "tabs",
     "storage",
-    "https://*/*"
+    "https://*/*",
+    "http://*/*"
   ],
   "author": "",
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
@@ -22,13 +23,14 @@
     {
       "all_frames": true,
       "js": [
-        "extension/content-script.js"
+        "runtime.js",
+        "content.js"
       ],
       "matches": [
         "https://*/*",
         "http://*/*"
       ],
-      "run_at": "document_start"
+      "run_at": "document_end"
     }
   ],
   "icons": {

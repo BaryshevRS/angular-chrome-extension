@@ -8,6 +8,7 @@
   "files": [
     "src/main.ts",
     "src/extension/background.ts",
+    "src/extension/content.ts",
     "src/polyfills.ts"
   ],
   "include": [
