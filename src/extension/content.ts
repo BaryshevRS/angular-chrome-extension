@@ -10,6 +10,7 @@ import { ConfigsService } from "../app/services/configs/configs.service";
 import { Configs } from "../app/services/configs/configs";
 import { checkConditions, extension } from "./content/extension";
 import { PageContent, textNodesObservable } from './content/observable-text-nodes';
+import { modalHandler, modalRemoveHandler } from './content/modal';
 
 const storageService = new StorageService();
 const configsService = new ConfigsService(storageService);
@@ -56,4 +57,15 @@ window.onload = () => {
       });
     }
   });
+}
+
+const contentLoadedHandler = () => {
+  document.addEventListener('click', modalRemoveHandler);
+  document.addEventListener('click', modalHandler);
+}
+
+if (document.readyState !== 'loading') {
+  contentLoadedHandler();
+} else {
+  document.addEventListener('DOMContentLoaded', contentLoadedHandler);
 }

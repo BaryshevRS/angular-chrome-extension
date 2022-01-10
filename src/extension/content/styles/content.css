@@ -1,4 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap');
+
 [data-meobwoof] {
   background: rgba( 91, 0, 129, 0.2);
   cursor: pointer;
+}
+
+#meobwoof {
+  font-family: Nunito Sans, sans-serif, Arial;
+  width: 100%;
+  max-width: 400px;
+  height: 270px;
+  background: #FFFFFF;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  position: absolute;
+  z-index: 999;
+  top: 0px;
+  left: 0px;
+  margin-top: 5px;
+}
+
+#meobwoof-header {
+  display: flex;
+  height: 45px;
+  font-size: 18px;
+  align-items: center;
+  justify-content: space-between;
+  color: #000000;
+  padding: 12px 20px;
+  box-sizing: border-box;
+}
+
+#meobwoof-header span {
+  font-weight: bold;
+}
+
+#meobwoof-close {
+  cursor: pointer;
+  width: 11.31px;
+  height: 11.31px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url("data:image/svg+xml,%3Csvg width='17' height='17' viewBox='0 0 17 17' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.4823 12.1263L8.4823 8.12631L4.4823 12.1263' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M4.48242 4.12646L8.48242 8.12647L12.4824 4.12646' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
+}
+
+#meobwoof-img {
+  width: 100%;
+  height: 225px;
+  position: relative;
+  text-align: center;
+}
+
+#meobwoof-img img {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-bottom-right-radius: 12px;
+  border-bottom-left-radius: 12px;
 }
