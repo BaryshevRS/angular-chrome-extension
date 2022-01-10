@@ -10,3 +10,12 @@ chrome.runtime.onInstalled.addListener(function ({reason}) {
     });
   }
 });
+
+// chrome.tabs.onActivated.addListener(function({tabId}) {
+//   chrome.tabs.query({active: true, currentWindow: true},function(tabs) {
+//     if (tabs[0].id === tabId) {
+//       chrome.tabs.sendMessage(tabId, {payload: tabId}, function(response) {});
+//     }
+//   });
+// });
+

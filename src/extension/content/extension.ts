@@ -39,8 +39,6 @@ export const extension = (
   }: Configs,
   text = ''
 ) => {
-  console.log('textContent', text);
-
   if (enableExtension && !disabledSites.includes(location.host)) {
     if (
       (loveCats && loveDogs)
