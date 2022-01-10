@@ -43,8 +43,7 @@ export const extension = (
 
   if (enableExtension && !disabledSites.includes(location.host)) {
     if (
-      (loveCats && loveDogs) ||
-      (!loveCats && !loveDogs)
+      (loveCats && loveDogs)
     ) {
       text = setMatches(text);
     } else if (loveCats) {

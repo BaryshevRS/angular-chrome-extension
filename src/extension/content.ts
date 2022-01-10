@@ -1,16 +1,18 @@
 import {
   BehaviorSubject,
+  fromEvent,
   ReplaySubject,
   skip,
   switchMap
 } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { StorageService } from "../app/services/storage/storage.service";
 import { ConfigsService } from "../app/services/configs/configs.service";
 import { Configs } from "../app/services/configs/configs";
 import { checkConditions, extension } from "./content/extension";
 import { PageContent, textNodesObservable } from './content/observable-text-nodes';
-import { modalHandler, modalRemoveHandler } from './content/modal';
+import { checkModalButton, checkModalRemove, modalHandler, modalRemoveHandler } from './content/modal';
+import { getAnimal } from "./content/api";
 
 const storageService = new StorageService();
 const configsService = new ConfigsService(storageService);
@@ -60,8 +62,33 @@ window.onload = () => {
 }
 
 const contentLoadedHandler = () => {
-  document.addEventListener('click', modalRemoveHandler);
-  document.addEventListener('click', modalHandler);
+  const documentClick$ = fromEvent(document, 'click');
+
+  documentClick$
+    .pipe(
+      filter(checkModalRemove),
+      tap((event: Event) => {
+        modalRemoveHandler(event as MouseEvent)
+      })
+    ).subscribe();
+
+  documentClick$
+    .pipe(
+      filter(checkModalButton),
+      switchMap((event: Event) => {
+        event.stopImmediatePropagation();
+        event.stopPropagation();
+        event.preventDefault();
+
+        const target = event.target as Element;
+        const animal = target.textContent?.match(new RegExp(/cat/, 'i')) ? 'cat': 'dog';
+        return getAnimal(animal).pipe(
+          map((src) => ({animal, src, event}))
+        )
+      })
+    ).subscribe(({animal, src, event}) => {
+      modalHandler(event, src, animal)
+  });
 }
 
 if (document.readyState !== 'loading') {
