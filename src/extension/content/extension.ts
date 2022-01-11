@@ -6,8 +6,11 @@ const setMatches = (text = '', changeTo?: Record<string, string>) => {
   words.forEach((w) => {
     text = text
       .replace(
-        new RegExp(`(^${w}[^a-z]{1}|^${w}$|[^a-z]{1}${w}[^a-z]{1}|[^a-z]{1}${w}$)`, 'gi'),
-        `<span data-meowoof>$1</span>`
+        new RegExp(`(^${w}[^a-z\-]{1}|^${w}$|[^a-z\-]{1}${w}[^a-z\-]{1}|[^a-z\-]{1}${w}$)`, 'gi'),
+        function (src) {
+          return src.replace(new RegExp(`([a-z]+)`, 'i'),
+            `<span data-meowoof>$1</span>`);
+        }
       )
   })
 
