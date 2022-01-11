@@ -62,9 +62,9 @@ window.onload = () => {
 }
 
 const contentLoadedHandler = () => {
-  // chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
-  //   sendResponse({});
-  // });
+  chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
+    sendResponse({});
+  });
 
   const documentClick$ = fromEvent(document, 'click');
 
