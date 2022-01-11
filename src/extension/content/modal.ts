@@ -1,16 +1,16 @@
 const modalRemove = () => {
-  const modal = document.getElementById("meobwoof");
+  const modal = document.getElementById("meowoof");
   modal?.parentNode?.removeChild(modal);
 }
 
 const templateModal = (left: number, top: number, src = '', animal = ''): string => `
-<div style="left: ${left}px; top: ${top}px" id="meobwoof">
-    <div id="meobwoof-header">
+<div style="left: ${left}px; top: ${top}px" id="meowoof">
+    <div id="meowoof-header">
         <div>
             <span>Look!</span> It’s a ${animal}!</div>
-            <div id="meobwoof-close"></div>
+            <div id="meowoof-close"></div>
         </div>
-        <div id="meobwoof-img">
+        <div id="meowoof-img">
             <div class="lds-ripple"><div></div><div></div></div>
             <img src="${src}" alt="">
         </div>
@@ -23,18 +23,18 @@ const disableAnimalButton = (animal: string) => {
 }
 
 export const checkModalRemove = (e: Event) => {
-  return (e.target as Element).id === 'meobwoof-close';
+  return (e.target as Element).id === 'meowoof-close';
 }
 
 export const modalRemoveHandler = (e: MouseEvent) => {
-  if ((e.target as Element).id === 'meobwoof-close') {
+  if ((e.target as Element).id === 'meowoof-close') {
     modalRemove();
   }
 }
 
 export const checkModalButton = (e: Event) => {
   const target = e.target as Element;
-  return target.getAttributeNames().includes('data-meobwoof');
+  return target.getAttributeNames().includes('data-meowoof');
 }
 
 export const modalHandler = (e: Event, src: string, animal: string) => {

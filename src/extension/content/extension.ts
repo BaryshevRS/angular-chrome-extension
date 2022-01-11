@@ -7,7 +7,7 @@ const setMatches = (text = '', changeTo?: Record<string, string>) => {
     text = text
       .replace(
         new RegExp(`(^${w}[^a-z]{1}|^${w}$|[^a-z]{1}${w}[^a-z]{1}|[^a-z]{1}${w}$)`, 'gi'),
-        `<span data-meobwoof>$1</span>`
+        `<span data-meowoof>$1</span>`
       )
   })
 
