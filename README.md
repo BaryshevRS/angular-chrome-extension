@@ -5,6 +5,7 @@ Example of browser plugin implementation with `popup` template in Angular.
 <details> 
   <summary>The task is to create a Chrome extension for cats and dogs lovers</summary>
  
+
 If enabled, the extension should replace *"cat"* / *"dog"* words (depending on user preference) from every webpage, highlight mentions of the user's favorite animal, and show some pictures of it upon clicking.
 
 We use Angular in our content scripts, but you can use any frameworks or libraries you like, or none at all.
@@ -60,8 +61,9 @@ You can use the following APIs to fetch pictures:
 <details> 
   <summary>Task solve</summary>
 
+
 1. The server is implemented in the functions folder based on `yandex serverless functions`. It is used to select a picture.
-2. To build the plugin, run : `npm run build`.
+2. To build the plugin run : `npm run build`.
 
 ![](./readme/solve/1.jpg)
 ![](./readme/solve/2.jpg)
